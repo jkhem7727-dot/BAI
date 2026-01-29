@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Calculator with History</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background:#020617;
+  padding-top:40px;
+  position:relative;
+}
+
+/* Boy icon at top-left */
+.boy-icon{
+  position:fixed;
+  top:10px;
+  left:10px;
+  font-size:40px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+}
+
+/* History panel */
+.history-panel{
+  position:fixed;
+  top:60px;
+  left:10px;
+  background:#1e293b;
+  color:white;
+  padding:10px;
+  border-radius:10px;
+  max-height:300px;
+  width:200px;
+  overflow-y:auto;
+  display:none;
+}
+
+/* Calculator layout */
+.calculator{
+  width:400px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:50px;
+}
+
+/* NUMBER DISPLAY */
+.display{
+  width:100%;
+  height:100px;
+  background:transparent;
+  color:#fff;
+  font-size:50px;
+  text-align:right;
+  padding:18px;
+  border:none;
+  margin-bottom:20px;
+}
+
+/* BUTTONS */
+.buttons{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
+  width:100%;
+}
+
+button{
+  height:80px;
+  font-size:24px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  background:#1e293b;
+  color:white;
+}
+
+button:hover{
+  background:#334155;
+}
+
+.operator{ background:#2563eb; }
+.equal{ grid-column:span 2; background:#16a34a; }
+.clear{ background:#dc2626; }
+</style>
+</head>
+
+<body>
+
+<!-- Boy Icon -->
+<div class="boy-icon" onclick="toggleHistory()">👦</div>
+
+<!-- History Panel -->
+<div class="history-panel" id="historyPanel">
+  <h3>History</h3>
+  <ul id="historyList"></ul>
+</div>
+
+<div class="calculator">
+  <div class="display" id="display">0</div>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button onclick="deleteLast()">⌫</button>
+    <button onclick="append('%')">%</button>
+    <button class="operator" onclick="append('/')">÷</button>
+
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="operator" onclick="append('*')">×</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="operator" onclick="append('-')">−</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button class="operator" onclick="append('+')">+</button>
+
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+let historyPanel = document.getElementById("historyPanel");
+let historyList = document.getElementById("historyList");
+let resultShown = false; // ⭐ important flag
+let history = [];
+
+// Toggle History Panel
+function toggleHistory(){
+  if(historyPanel.style.display === "none" || historyPanel.style.display === ""){
+    historyPanel.style.display = "block";
+  } else {
+    historyPanel.style.display = "none";
+  }
+}
+
+// Append value to display
+function append(value){
+  if(resultShown){
+    display.innerText = value; // clear old answer
+    resultShown = false;
+  }else{
+    display.innerText =
+      display.innerText === "0" ? value : display.innerText + value;
+  }
+}
+
+// Clear display
+function clearDisplay(){
+  display.innerText = "0";
+  resultShown = false;
+}
+
+// Delete last character
+function deleteLast(){
+  display.innerText =
+    display.innerText.length > 1 ? display.innerText.slice(0,-1) : "0";
+}
+
+// Calculate result
+function calculate(){
+  try{
+    let expression = display.innerText;
+    let result = eval(expression);
+    display.innerText = result;
+    resultShown = true;
+
+    // Save to history
+    history.push(`${expression} = ${result}`);
+    updateHistory();
+  }catch{
+    display.innerText = "Error";
+    resultShown = true;
+  }
+}
+
+// Update history panel
+function updateHistory(){
+  historyList.innerHTML = "";
+  history.slice().reverse().forEach(item => {
+    let li = document.createElement("li");
+    li.textContent = item;
+    historyList.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>
