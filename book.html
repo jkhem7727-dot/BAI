@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Left-Aligned PDF Button</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 50px;
+    }
+
+    /* Button container left aligned */
+    .button-container {
+      display: flex;
+      justify-content: flex-start; /* Left alignment */
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #pdfViewer {
+      width: 80%;
+      height: 600px;
+      display: none; /* Initially hidden */
+      border: 2px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Open PDF with Left-Aligned Button</h1>
+
+  <!-- Left-aligned button -->
+  <div class="button-container">
+    <button id="openBook">Book</button>
+  </div>
+
+  <!-- PDF Viewer -->
+  <embed id="pdfViewer" src="book.pdf" type="application/pdf">
+
+  <script>
+    const button = document.getElementById('openBook');
+    const pdfViewer = document.getElementById('pdfViewer');
+
+    // Show PDF on click
+    button.addEventListener('click', () => {
+      pdfViewer.style.display = 'block';
+      pdfViewer.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
